@@ -1,101 +1,54 @@
-import csv
+"""
+File Name: contact_manager.py
+Program: Contact Manager Application
+
+Author: Jun Y. Ercia
+
+Description:
+Implements the ContactManager class responsible for managing
+all contact-related operations including creation, updating,
+deletion, searching, and displaying contacts.
+
+The class also validates phone numbers and coordinates
+persistent storage through the ContactStorage component.
+"""
+
 import re
-from contact import Contact
-
-
-# =========================================================
-# Class: ContactManager
-#
-# Description:
-#     Manages contact operations and CSV storage.
-# =========================================================
+from contact_storage import ContactStorage
 
 
 class ContactManager:
 
-    FILE_NAME = "contacts.csv"
-
-    # -----------------------------------------------------
-    # Constructor
-    #
-    # Postconditions:
-    #     Contact list initialized and data loaded
-    # -----------------------------------------------------
     def __init__(self):
+        """Initializes the storage system and loads existing contacts."""
 
-        self.__contacts = []
-        self.load_contacts()
+        self.__storage = ContactStorage()
+        self.__contacts = self.__storage.load_contacts()
 
-    # -----------------------------------------------------
-    # Function: validate_phone
-    #
-    # Purpose:
-    #     Validate Philippine mobile number
-    #
-    # Format:
-    #     09XXXXXXXXX
-    # -----------------------------------------------------
     def validate_phone(self, phone):
+        """
+        Validates Philippine mobile phone numbers.
 
+        Format:
+            09XXXXXXXXX
+        """
         pattern = r"^09\d{9}$"
         return re.match(pattern, phone)
 
-    # -----------------------------------------------------
-    # Function: load_contacts
-    #
-    # Postconditions:
-    #     Contacts loaded from CSV
-    # -----------------------------------------------------
-    def load_contacts(self):
-
-        try:
-
-            with open(self.FILE_NAME, newline="") as file:
-
-                reader = csv.reader(file)
-
-                for row in reader:
-
-                    if len(row) == 3:
-                        contact = Contact(row[0], row[1], row[2])
-                        self.__contacts.append(contact)
-
-        except FileNotFoundError:
-            pass
-
-    # -----------------------------------------------------
-    # Function: save_contacts
-    #
-    # Postconditions:
-    #     Contact list saved to CSV
-    # -----------------------------------------------------
-    def save_contacts(self):
-
-        with open(self.FILE_NAME, "w", newline="") as file:
-
-            writer = csv.writer(file)
-
-            for contact in self.__contacts:
-                writer.writerow(contact.to_list())
-
-    # -----------------------------------------------------
-    # Function: add_contact
-    # -----------------------------------------------------
     def add_contact(self, contact):
+        """Adds a new contact and saves the updated list."""
 
         if not self.validate_phone(contact.get_phone_number()):
             print("Invalid Philippine phone number.")
             return
 
         self.__contacts.append(contact)
-        self.save_contacts()
+        self.__storage.save_contacts(self.__contacts)
 
         print("Contact added.")
 
-    # -----------------------------------------------------
-    # Function: view_contacts
-    # -----------------------------------------------------
     def view_contacts(self):
+        """Displays all stored contacts."""
 
         if not self.__contacts:
             print("No contacts.")
@@ -105,10 +58,11 @@ class ContactManager:
             print("----------------")
             contact.display()
 
-    # -----------------------------------------------------
-    # Function: search_contact
-    # -----------------------------------------------------
     def search_contact(self, keyword):
+        """
+        Searches contacts by name, phone number, or email.
+        Returns a list of matching contacts.
+        """
 
         results = []
 
@@ -123,10 +77,8 @@ class ContactManager:
 
         return results
 
-    # -----------------------------------------------------
-    # Function: update_contact
-    # -----------------------------------------------------
     def update_contact(self, name):
+        """Updates an existing contact's phone number and email."""
 
         for contact in self.__contacts:
 
@@ -142,24 +94,22 @@ class ContactManager:
                 contact.set_phone_number(new_phone)
                 contact.set_email(new_email)
 
-                self.save_contacts()
+                self.__storage.save_contacts(self.__contacts)
 
                 print("Contact updated.")
                 return
 
         print("Contact not found.")
 
-    # -----------------------------------------------------
-    # Function: delete_contact
-    # -----------------------------------------------------
     def delete_contact(self, name):
+        """Deletes a contact from the list."""
 
         for contact in self.__contacts:
 
             if contact.get_name().lower() == name.lower():
 
                 self.__contacts.remove(contact)
-                self.save_contacts()
+                self.__storage.save_contacts(self.__contacts)
 
                 print("Contact deleted.")
                 return
