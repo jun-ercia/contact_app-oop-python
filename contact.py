@@ -1,88 +1,49 @@
+"""
+File Name: contact.py
+Program: Contact Manager Application
+
+Author: Jun Y. Ercia
+
+Description:
+Defines the Contact class representing a contact record
+containing name, phone number, and email address.
+"""
+
 from person import Person
-
-
-# =========================================================
-# Class: Contact
-#
-# Description:
-#     Represents a contact with phone and email.
-# =========================================================
 
 
 class Contact(Person):
 
-    # -----------------------------------------------------
-    # Constructor
-    #
-    # Preconditions:
-    #     name, phone, email must be strings
-    #
-    # Postconditions:
-    #     Contact object created
-    # -----------------------------------------------------
     def __init__(self, name, phone_number, email):
+        """Creates a contact with phone number and email."""
 
         super().__init__(name)
+
         self.__phone_number = phone_number
         self.__email = email
 
-    # -----------------------------------------------------
-    # Function: get_phone_number
-    #
-    # Postconditions:
-    #     Returns phone number
-    # -----------------------------------------------------
     def get_phone_number(self):
-
+        """Returns the phone number."""
         return self.__phone_number
 
-    # -----------------------------------------------------
-    # Function: get_email
-    #
-    # Postconditions:
-    #     Returns email address
-    # -----------------------------------------------------
     def get_email(self):
-
+        """Returns the email address."""
         return self.__email
 
-    # -----------------------------------------------------
-    # Function: set_phone_number
-    #
-    # Postconditions:
-    #     Updates phone number
-    # -----------------------------------------------------
     def set_phone_number(self, phone):
-
+        """Updates the phone number."""
         self.__phone_number = phone
 
-    # -----------------------------------------------------
-    # Function: set_email
-    #
-    # Postconditions:
-    #     Updates email address
-    # -----------------------------------------------------
     def set_email(self, email):
-
+        """Updates the email address."""
         self.__email = email
 
-    # -----------------------------------------------------
-    # Function: to_list
-    #
-    # Postconditions:
-    #     Returns contact data as list
-    # -----------------------------------------------------
     def to_list(self):
-
+        """Converts contact data into a list for CSV storage."""
         return [self.get_name(), self.__phone_number, self.__email]
 
-    # -----------------------------------------------------
-    # Function: display
-    #
-    # Postconditions:
-    #     Displays contact information
-    # -----------------------------------------------------
     def display(self):
+        """Displays contact information."""
 
         super().display()
         print(f"Phone : {self.__phone_number}")
