@@ -172,6 +172,8 @@ Contributions are welcome. You may:
 
 Jun Y. Ercia
 
+Faculty, Computer Science / Computer Engineering
+
 # License
 
 This project is provided for **educational purposes**.
